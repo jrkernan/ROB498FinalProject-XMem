@@ -27,7 +27,7 @@ except:
     print('torch.MPS not available.')
 
 from PySide6.QtWidgets import (QWidget, QApplication, QComboBox, QCheckBox,
-    QHBoxLayout, QLabel, QPushButton, QTextEdit, QSpinBox, QFileDialog,
+    QHBoxLayout, QLabel, QPushButton, QLineEdit, QTextEdit, QSpinBox, QFileDialog,
     QPlainTextEdit, QVBoxLayout, QSizePolicy, QButtonGroup, QSlider, QRadioButton)
 
 from PySide6.QtGui import QPixmap, QKeySequence, QImage, QTextCursor, QIcon, QShortcut
@@ -88,6 +88,14 @@ class App(QWidget):
 
         self.reset_button = QPushButton('Reset Frame')
         self.reset_button.clicked.connect(self.on_reset_mask)
+
+        #########################################################################################################################
+        # owl-vit buttons
+        self.text_input = QLineEdit(self)
+        self.text_input.setPlaceholderText("Enter object name")
+        self.run_owl_vit_button = QPushButton('Auto Mask', self)
+        self.run_owl_vit_button.clicked.connect(self.on_run_owl_vit)
+        #########################################################################################################################
 
         # LCD
         self.lcd = QTextEdit()
@@ -307,6 +315,14 @@ class App(QWidget):
         import_area.addWidget(self.import_mask_button)
         import_area.addWidget(self.import_layer_button)
         minimap_area.addLayout(import_area)
+
+        ##############################################################################################################
+        owl_area = QHBoxLayout()
+        owl_area.setAlignment(Qt.AlignmentFlag.AlignTop)
+        owl_area.addWidget(self.text_input)
+        owl_area.addWidget(self.run_owl_vit_button)
+        minimap_area.addLayout(owl_area)
+        ##############################################################################################################
 
         # console
         minimap_area.addWidget(self.console)
@@ -595,6 +611,15 @@ class App(QWidget):
             self.forward_run_button.setEnabled(False)
             self.backward_run_button.setText('Pause Propagation')
             self.on_propagation()
+
+    ##################################################################################################################
+    def on_run_owl_vit(self):
+        object_name = self.text_input.text()
+        print(f"Running OWL-ViT for object: {object_name}")
+
+        # Run OWL-VIT with object_name
+    ##################################################################################################################
+
 
     def on_pause(self):
         self.propagating = False
