@@ -90,9 +90,13 @@ class App(QWidget):
         self.reset_button.clicked.connect(self.on_reset_mask)
 
         #########################################################################################################################
-        # owl-vit buttons
+        # Initialization
+
+        # Text box for user input
         self.text_input = QLineEdit(self)
         self.text_input.setPlaceholderText("Enter object name")
+
+        # Button to run OWL-ViT
         self.run_owl_vit_button = QPushButton('Auto Mask', self)
         self.run_owl_vit_button.clicked.connect(self.on_run_owl_vit)
         #########################################################################################################################
@@ -317,10 +321,14 @@ class App(QWidget):
         minimap_area.addLayout(import_area)
 
         ##############################################################################################################
+
+        # Make a layout for the text box and the button
         owl_area = QHBoxLayout()
         owl_area.setAlignment(Qt.AlignmentFlag.AlignTop)
         owl_area.addWidget(self.text_input)
         owl_area.addWidget(self.run_owl_vit_button)
+
+        # Add the layout to the minimap section of the GUI
         minimap_area.addLayout(owl_area)
         ##############################################################################################################
 
@@ -613,11 +621,41 @@ class App(QWidget):
             self.on_propagation()
 
     ##################################################################################################################
+
+    # Function that runs when the "Auto Mask" button is clicked
     def on_run_owl_vit(self):
+
         object_name = self.text_input.text()
         print(f"Running OWL-ViT for object: {object_name}")
 
-        # Run OWL-VIT with object_name
+        # Run OWL-VIT with object_name to generate a bounding box
+
+        # Hard coded coordinates for clicking on the racoon. Points will eventually come from the OWL-ViT bounding box
+        points = [(539, 230), (505, 298)]
+
+        self.simulate_clicks(points)
+
+    # Simulates the code for clicking, given an array of tuples that represents the points you want to click
+    def simulate_clicks(self, points, is_negative=False):
+
+        # Initializes self.current_image_torch and self.current_prob
+        self.load_current_torch_image_mask()
+
+        # Iterate through the x,y coordinate pairs
+        for x, y in points:
+
+            self.complete_interaction()
+            self.fbrs_controller.unanchor()
+
+            # Create a click interaction object and run the code to make the mask
+            self.interaction = ClickInteraction(self.current_image_torch, self.current_prob, (self.height, self.width), self.fbrs_controller, self.current_object)
+            self.interaction.push_point(x, y, is_negative)
+            self.interacted_prob = self.interaction.predict().to(self.device)
+
+            self.update_interacted_mask()
+            self.update_gpu_usage()
+
+        self.current_interaction = None 
     ##################################################################################################################
 
 
