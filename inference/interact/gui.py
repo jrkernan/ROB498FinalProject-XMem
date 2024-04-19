@@ -623,15 +623,25 @@ class App(QWidget):
     ##################################################################################################################
 
     # Function that runs when the "Auto Mask" button is clicked
+    
     def on_run_owl_vit(self):
 
         object_name = self.text_input.text()
         print(f"Running OWL-ViT for object: {object_name}")
 
-        # Run OWL-VIT with object_name to generate a bounding box
+        image_folder = f"{self.config['workspace']}/images/"
+        image_path = os.path.join(image_folder,os.listdir(image_folder)[0])
+        query = ['a photo of a ' + str(object_name)]
+        coords = get_bbx(image_path,query)
+        centers = []
+        for bbx in coords:
+            x_center = int((bbx[0]+bbx[2])/2)
+            y_center = int((bbx[1]+bbx[3])/2)
+            centers.append(x_center, y_center) # maybe add in off center clicks relative to bounding box
 
         # Hard coded coordinates for clicking on the racoon. Points will eventually come from the OWL-ViT bounding box
-        points = [(539, 230), (505, 298)]
+        points = centers
+        # points = [(539, 230), (505, 298)]
 
         self.simulate_clicks(points)
 
