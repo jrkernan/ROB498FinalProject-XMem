@@ -625,6 +625,7 @@ class App(QWidget):
     ##################################################################################################################
 
     # Function that runs when the "Auto Mask" button is clicked
+    
     def on_run_owl_vit(self):
 
         object_name = self.text_input.text()
