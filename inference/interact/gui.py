@@ -95,8 +95,8 @@ class App(QWidget):
         # Initialization
 
         # Text box for user input
-        self.text_input = QLineEdit(self)
-        self.text_input.setPlaceholderText("Enter object name")
+        self.text_input = QTextEdit(self)
+        self.text_input.setPlaceholderText("Enter object name and amount. EX: Cat 2 Racoon 1")
 
         # Button to run OWL-ViT
         self.run_owl_vit_button = QPushButton('Auto Mask', self)
@@ -628,24 +628,44 @@ class App(QWidget):
     
     def on_run_owl_vit(self):
 
-        object_name = self.text_input.text()
-        print(f"Running OWL-ViT for object: {object_name}")
+        text_input = self.text_input.toPlainText()
+        split_input = text_input.split()
+        objects = split_input[::2]
+        amounts = split_input[1::2]
 
         image_folder = f"{self.config['workspace']}/images/"
         image_path = os.path.join(image_folder,os.listdir(image_folder)[0])
-        query = ['a photo of a ' + str(object_name)]
-        coords = get_bbx(image_path,query)
-        centers = []
-        for bbx in coords:
-            x_center = int((bbx[0]+bbx[2])/2)
-            y_center = int((bbx[1]+bbx[3])/2)
-            centers.append(x_center, y_center) # maybe add in off center clicks relative to bounding box
+        
+        for idx in range(len(objects)):
+            object_name = objects[idx]
+            print(f"Running OWL-ViT for object: {object_name}")
+            query = ['a photo of a ' + str(object_name)]
+            if len(amounts) <= idx:
+                coords = get_bbx(image_path,query)
+            else:
+                coords = get_bbx(image_path,query,int(amounts[idx]))
+            for bbx in coords:
+                centers = []
+                x_center = int((bbx[0]+bbx[2])/2)
+                y_center = int((bbx[1]+bbx[3])/2)
+                centers.append((x_center, y_center)) # maybe add in off center clicks relative to bounding box
+                print(centers)
+                self.simulate_clicks(centers)
 
-        # Hard coded coordinates for clicking on the racoon. Points will eventually come from the OWL-ViT bounding box
-        points = centers
-        # points = [(539, 230), (505, 298)]
+                self.current_object += 1
+                #self.object_dial.setValue(number)
+                # if self.fbrs_controller is not None:
+                #     self.fbrs_controller.unanchor()
+                # self.console_push_text(f'Current object changed to {number}.')
+                # self.clear_brush()
+                # self.vis_brush(self.last_ex, self.last_ey)
+                # self.update_interact_vis()
+                # self.show_current_frame()
 
-        self.simulate_clicks(points)
+            # points = centers
+            # # points = [(539, 230), (505, 298)]
+
+            # self.simulate_clicks(points)
 
     # Simulates the code for clicking, given an array of tuples that represents the points you want to click
     def simulate_clicks(self, points, is_negative=False):
@@ -663,6 +683,7 @@ class App(QWidget):
             self.interaction = ClickInteraction(self.current_image_torch, self.current_prob, (self.height, self.width), self.fbrs_controller, self.current_object)
             self.interaction.push_point(x, y, is_negative)
             self.interacted_prob = self.interaction.predict().to(self.device)
+            
 
             self.update_interacted_mask()
             self.update_gpu_usage()
