@@ -1,3 +1,7 @@
+## DEEPROB FINAL PROJECT
+A problem we noticed with the below project is the requirement to manually create a mask for the first frame of each video. We utilized [OWL-ViT](https://github.com/google-research/scenic/tree/main/scenic/projects/owl_vit) to convert a text query into a mask. To run our extension, clone and setup this repo as instructed below. Run the demo script, specifying num_objects as at least the amount of masks you wish to create. Once the demo runs, a GUI will pop up. On the bottom left-hand side of the GUI, there will be a text box to input what objects to mask. That input should be of the form: [object 1 name] [object 1 amount] [object 2 name] [object 2 amount]. For example: "Cat 2 Racoon 1".
+
+
 # XMem: Long-Term Video Object Segmentation with an Atkinson-Shiffrin Memory Model
 
 ## New VOS project: Putting the Object Back into Video Object Segmentation: https://github.com/hkchengrex/Cutie
