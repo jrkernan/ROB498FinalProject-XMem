@@ -8,7 +8,11 @@ One limitation of Video Object Segmentation (VOS) is the requirement to manually
 
 Example with 1 object:
 
-https://github.com/jrkernan/ROB498FinalProject-XMem/raw/main/Bear.mp4
+<video width="320" height="240" controls>
+  <source src="https://github.com/jrkernan/ROB498FinalProject-XMem/raw/main/Bear.mp4?raw=true" type="video/mp4">
+  Your browser does not support the video tag.
+</video>
+
 
 Example with 2 objects:
 
