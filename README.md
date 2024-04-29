@@ -2,21 +2,22 @@
 
 Omer Benharush, Sarah Chan, Jack Kernan, Max Rucker
 
+University of Michigan
+
+[[PDF]](https://arxiv.org/pdf/2207.07115.pdf) REPLACE THIS WITH THE REPORT PDF
+
 One limitation of Video Object Segmentation (VOS) is the requirement to manually create a mask for the first frame of a video. We algorithmically extended the XMem paper by utilizing [OWL-ViT](https://github.com/google-research/scenic/tree/main/scenic/projects/owl_vit) to convert a text query into a mask. To run our extension, clone and setup the original XMem repo as instructed below. Run the demo script, specifying num_objects as the amount of masks you wish to create. Once the demo runs, a GUI will pop up. On the bottom right-hand side of the GUI, there will be a text box to input what objects to mask. That input should be of the form: [object 1 name] [object 1 amount] [object 2 name] [object 2 amount]. For example: "Cat 2 Racoon 1". Then run the GUI as described in the below documentation.
 
 ## Demo
 
 Example with 1 object:
 
-<video width="320" height="240" controls>
-  <source src="https://github.com/jrkernan/ROB498FinalProject-XMem/raw/main/Bear.mp4?raw=true" type="video/mp4">
-  Your browser does not support the video tag.
-</video>
-
+[![Watch the video](https://img.youtube.com/vi/g2ngW6zb5QY/0.jpg)](https://www.youtube.com/watch?v=g2ngW6zb5QY)
 
 Example with 2 objects:
 
-https://github.com/jrkernan/ROB498FinalProject-XMem/raw/main/Baby%20and%20Puppy%20Video.mp4
+[![Watch the video](https://img.youtube.com/vi/lS44P86Mia4/0.jpg)](https://www.youtube.com/watch?v=lS44P86Mia4)
+
 
 This is a forked version from XMem. Everything below is from the original XMem repository:
 
